@@ -42,26 +42,24 @@ const GroupItem = ({
           )}
         </div>
       </div>
-      <div className={`${groupItem.isVisible ? "" : "hidden-item"} group-main`}>
+      <div className={`${groupItem.isVisible ? "" : "item-center"} group-main`}>
         <div className="group-header">
           <div className="group-header-img">{groupItem.icon}</div>
           <h4>{groupItem.title}</h4>
         </div>
-        {groupItem.description && (
+        {groupItem.isVisible && groupItem.description && (
           <p className="group-header-description">{groupItem.description}</p>
         )}
       </div>
-      <div
-        className={`${
-          groupItem.isVisible ? "" : "hidden-item"
-        } group-list-item`}
+      {groupItem.isVisible && <div
+        className={`group-list-item`}
       >
         <ListItem
           isGroupVisible={groupItem.isVisible}
           listItem={groupItem.listItem}
           groupTitle={groupItem.title}
         />
-      </div>
+      </div>}
     </div>
   );
 };

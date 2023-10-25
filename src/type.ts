@@ -8,7 +8,7 @@ export type GroupType = {
 }
 
 export type ItemType = {
-    id: number;
+    id: string;
     name: string;
     icon: JSX.Element;
     isVisible: boolean;

@@ -11,13 +11,15 @@ import {
   ItemToggleContext,
   ItemUpdateContext,
 } from "../../../../App";
+import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 type Props = {
   data: ItemType;
   isGroupVisible: Boolean;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null | undefined;
 };
 
-const Item = ({ data, isGroupVisible }: Props) => {
+const Item = ({ data, isGroupVisible, dragHandleProps }: Props) => {
   const [isUpdate, setIsUpdate] = useState<Boolean>(false);
   const [name, setName] = useState<string>(data.name);
 
@@ -32,6 +34,7 @@ const Item = ({ data, isGroupVisible }: Props) => {
           className={data.isVisible ? "menu-icon" : "menu-icon hidden-item"}
           src={MenuIcon}
           alt="menu"
+          {...dragHandleProps}
         />
         {data.isVisible ? (
           <img

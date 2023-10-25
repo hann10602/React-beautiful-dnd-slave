@@ -1,6 +1,6 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useState } from "react";
 import "./style.scss";
-import CloseIcon from "./icon/close.svg";
+import CloseIcon from "./icon/close.svg"; 
 import ComputerPenIcon from "./icon/writing.svg";
 import { groups } from "./const";
 import GroupItem from "./component/group-item";
@@ -10,16 +10,16 @@ export const GroupToggleContext = createContext<(id: number) => void>(
   (id: number) => {}
 );
 
-export const ItemToggleContext = createContext<(id: number) => void>(
-  (id: number) => {}
+export const ItemToggleContext = createContext<(id: string) => void>(
+  (id: string) => {}
 );
 
 export const ItemUpdateContext = createContext<
-  (id: number, name: string) => void
->((id: number, name: string) => {});
+  (id: string, name: string) => void
+>((id: string, name: string) => {});
 
-export const ItemDeleteContext = createContext<(id: number) => void>(
-  (id: number) => {}
+export const ItemDeleteContext = createContext<(id: string) => void>(
+  (id: string) => {}
 );
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
     });
   };
 
-  const itemUpdateHandler = (id: number, name: string) => {
+  const itemUpdateHandler = (id: string, name: string) => {
     setGroupList((prev: GroupType[]) => {
       return prev.map((group: GroupType) => {
         const listItem: ItemType[] = [];
@@ -57,7 +57,7 @@ function App() {
     });
   };
 
-  const itemDeleteHandler = (id: number) => {
+  const itemDeleteHandler = (id: string) => {
     setGroupList((prev: GroupType[]) => {
       return prev.map((group: GroupType) => {
         const newListItem = group.listItem.filter(
@@ -69,24 +69,26 @@ function App() {
     });
   };
 
-  const toggleItemHandler = (id: number) => {
-    setGroupList((prev: GroupType[]) => {
-      return prev.map((group: GroupType) => {
-        const listItem: ItemType[] = [];
-        group.listItem.map((item: ItemType) => {
-          if (item.id === id) {
-            const newItem = { ...item, isVisible: !item.isVisible };
-            listItem.push(newItem);
-            return newItem;
-          }
-
-          listItem.push(item);
-          return item;
+  const toggleItemHandler = (id: string) => {
+    setTimeout(() => {
+      setGroupList((prev: GroupType[]) => {
+        return prev.map((group: GroupType) => {
+          const listItem: ItemType[] = [];
+          group.listItem.map((item: ItemType) => {
+            if (item.id === id) {
+              const newItem = { ...item, isVisible: !item.isVisible };
+              listItem.push(newItem);
+              return newItem;
+            }
+  
+            listItem.push(item);
+            return item;
+          });
+  
+          return { ...group, listItem: listItem };
         });
-
-        return { ...group, listItem: listItem };
       });
-    });
+    }, 100)
   };
 
   return (
