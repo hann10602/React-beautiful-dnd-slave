@@ -5,7 +5,7 @@ import {
   DropResult,
   Droppable,
   OnDragEndResponder,
-} from "react-beautiful-dnd";
+} from "@hello-pangea/dnd";
 import "./style.scss";
 
 import { ItemType } from "../../../type";
@@ -47,7 +47,6 @@ const ListItem = ({ groupTitle, isGroupVisible, listItem }: Props) => {
 
   const handleOnDragEnd: OnDragEndResponder = (result: DropResult) => {
     const items = [...visibleList];
-    console.log(items);
     const [reorderedItem] = items.splice(result.source.index, 1);
     if (result.destination) {
       items.splice(result.destination.index, 0, reorderedItem);

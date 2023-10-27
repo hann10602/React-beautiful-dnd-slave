@@ -1,13 +1,14 @@
 import React, { createContext, useState } from "react";
 import "./style.scss";
-import CloseIcon from "./icon/close.svg"; 
+import CloseIcon from "./icon/close.svg";
 import ComputerPenIcon from "./icon/writing.svg";
 import { groups } from "./const";
 import GroupItem from "./component/group-item";
 import { GroupType, ItemType } from "./type";
+import { DragDropContext, Draggable, DropResult, Droppable, OnDragEndResponder } from "@hello-pangea/dnd";
 
-export const GroupToggleContext = createContext<(id: number) => void>(
-  (id: number) => {}
+export const GroupToggleContext = createContext<(id: string) => void>(
+  (id: string) => {}
 );
 
 export const ItemToggleContext = createContext<(id: string) => void>(
@@ -25,7 +26,7 @@ export const ItemDeleteContext = createContext<(id: string) => void>(
 function App() {
   const [groupList, setGroupList] = useState(groups);
 
-  const toggleGroupHandler = (id: number) => {
+  const toggleGroupHandler = (id: string) => {
     setGroupList((prev: GroupType[]) => {
       return prev.map((group: GroupType) => {
         if (group.id === id) {
@@ -80,15 +81,25 @@ function App() {
               listItem.push(newItem);
               return newItem;
             }
-  
+
             listItem.push(item);
             return item;
           });
-  
+
           return { ...group, listItem: listItem };
         });
       });
-    }, 100)
+    }, 100);
+  };
+
+  const handleOnDragEnd:OnDragEndResponder = (result:DropResult) => {
+    const items = [...groupList];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    if(result.destination) {
+      items.splice(result.destination.index, 0, reorderedItem);
+    }
+
+    setGroupList(items);
   };
 
   return (
@@ -104,13 +115,28 @@ function App() {
                 </div>
                 <img src={CloseIcon} alt="" />
               </header>
-              <div id="body-container">
-                {groupList.map((item, i) => (
-                  <div key={i}>
-                    <GroupItem groupItem={item} />
-                  </div>
-                ))}
-              </div>
+              <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="app">
+                  {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      <div id="body-container">
+                        {groupList.map((item, i) => (
+                          <div key={item.id}>
+                            <Draggable draggableId={item.id} index={i}>
+                              {(provided) => (
+                                <div ref={provided.innerRef}
+                                {...provided.draggableProps}>
+                                  <GroupItem groupItem={item} dragHandleProps={provided.dragHandleProps}/>
+                                </div>
+                              )}
+                            </Draggable>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
           </ItemDeleteContext.Provider>
         </ItemUpdateContext.Provider>

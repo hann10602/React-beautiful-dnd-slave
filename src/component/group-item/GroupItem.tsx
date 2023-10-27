@@ -6,14 +6,14 @@ import EyeIcon from "../../icon/eye.svg";
 import HiddenIcon from "../../icon/hidden.svg";
 import MenuIcon from "../../icon/menu.svg";
 import { GroupToggleContext } from "../../App";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 type Props = {
   groupItem: GroupType;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null | undefined;
 };
 
-const GroupItem = ({
-  groupItem,
-}: Props) => {
+const GroupItem = ({ groupItem, dragHandleProps }: Props) => {
   const GroupToggleHandler = useContext(GroupToggleContext);
 
   return (
@@ -21,9 +21,12 @@ const GroupItem = ({
       <div className="group-menu">
         <div className="group-menu-icon">
           <img
-            className={`${groupItem.isVisible ? "" : "hidden-item"} group-icon`}
+            className={`${
+              groupItem.isVisible ? "cursor-move" : "hidden-item"
+            } group-icon`}
             src={MenuIcon}
             alt="menu"
+            {...dragHandleProps}
           />
           {groupItem.isVisible ? (
             <img
@@ -51,15 +54,15 @@ const GroupItem = ({
           <p className="group-header-description">{groupItem.description}</p>
         )}
       </div>
-      {groupItem.isVisible && <div
-        className={`group-list-item`}
-      >
-        <ListItem
-          isGroupVisible={groupItem.isVisible}
-          listItem={groupItem.listItem}
-          groupTitle={groupItem.title}
-        />
-      </div>}
+      {groupItem.isVisible && (
+        <div className={`group-list-item`}>
+          <ListItem
+            isGroupVisible={groupItem.isVisible}
+            listItem={groupItem.listItem}
+            groupTitle={groupItem.title}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -9,7 +9,7 @@ import { GroupType } from "./type";
 
 export const groups: GroupType[] = [
   {
-    id: 1,
+    id: "1",
     title: "Portfolio",
     icon: <img src={BriefCaseIcon} alt="" />,
     isVisible: true,
@@ -55,7 +55,7 @@ export const groups: GroupType[] = [
     ],
   },
   {
-    id: 2,
+    id: "2",
     title: "Default Workspace",
     icon: <img src={SquareIcon} alt="" />,
     isVisible: false,
